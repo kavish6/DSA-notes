@@ -1,0 +1,23 @@
+Alternatively u could also use level order traversal and use queue.size to get no of nodes in that level. but given below is a different approach
+
+void leftviewutil(Node *root,vector<int>& x,int level,int* maxlvl)
+{
+    if(root==NULL)
+    return;
+    if(level>*maxlvl)
+    {
+        *maxlvl=level;
+        x.push_back(root->data);
+    }
+    leftviewutil(root->left,x,level+1,maxlvl);
+    leftviewutil(root->right,x,level+1,maxlvl);
+}
+//Function to return a list containing elements of left view of the binary tree.
+vector<int> leftView(Node *root)
+{
+    vector<int> res;
+    int maxlevel=0;
+    leftviewutil(root,res,1,&maxlevel);
+    return res;
+   // Your code here
+}

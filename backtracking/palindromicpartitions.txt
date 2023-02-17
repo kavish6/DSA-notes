@@ -1,0 +1,75 @@
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+// } Driver Code Ends
+//User function Template for C++
+
+class Solution {
+  public:
+    bool isPali(string curr,int s,int l)
+    {
+        while(s<l)
+        {
+            if(curr[s]==curr[l])
+            {
+                s++;
+                l--;
+            }
+            else
+            return false;
+        }
+        return true;
+    }
+    void solve(string S,vector<vector<string>>& ans,int i,vector<string> curr)
+    {
+        if(i>=S.length())
+        {
+            ans.push_back(curr);
+            return;
+        }
+        for(int j=i;j<S.length();j++)
+        {
+            if(isPali(S,i,j))
+            {
+                curr.push_back(S.substr(i,j-i+1));
+                solve(S,ans,j+1,curr);
+                curr.pop_back();
+            }
+        }
+    }
+    vector<vector<string>> allPalindromicPerms(string S) {
+        vector<vector<string>> ans;
+        vector<string> curr;
+        string temp;
+        solve(S,ans,0,curr);
+        
+        return ans;
+        // code here
+    }
+};
+
+//{ Driver Code Starts.
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        string S;
+        
+        cin>>S;
+
+        Solution ob;
+        vector<vector<string>> ptr = ob.allPalindromicPerms(S);
+        
+        for(int i=0; i<ptr.size(); i++)
+        {
+            for(int j=0; j<ptr[i].size(); j++)
+            {
+                cout<<ptr[i][j]<<" ";
+            }
+            cout<<endl;
+        }
+    }
+    return 0;
+}
+// } Driver Code Ends

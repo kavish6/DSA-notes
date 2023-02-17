@@ -1,0 +1,31 @@
+Given a string str of length N, you have to find number of palindromic subsequence (need not necessarily be distinct) which could be formed from the string str.
+Note: You have to return the answer module 109+7;
+
+
+
+#define MOD 1000000007
+class Solution{
+    public:
+    long long int t[1001][1001];
+    long long int solve(string &str,int i,int j)
+    {
+        if(i==j)
+        return t[i][j]=1;
+        if(i>j)
+        return t[i][j]=0;
+        if(t[i][j]!=-1)
+        return t[i][j];
+        if(str[i]==str[j])
+        return t[i][j]=(1+solve(str,i+1,j)%MOD+solve(str,i,j-1)%MOD)%MOD;
+        return t[i][j]=(solve(str,i+1,j)+solve(str,i,j-1)-solve(str,i+1,j-1) +MOD)%MOD;
+    }
+    /*You are required to complete below method */
+    long long int  countPS(string str)
+    {
+        memset(t,-1,sizeof(t));
+        int n=str.length();
+        return solve(str,0,n-1);
+       //Your code here
+    }
+     
+};

@@ -1,0 +1,45 @@
+Given a binary tree with a value associated with each node, we need to choose a subset of these nodes such that sum of chosen nodes is maximum under a constraint that no two chosen node in subset should be directly connected that is, if we have taken a node in our sum then we can’t take its any children or parents in consideration and vice versa.
+
+
+
+int getsum(Node *,map<Node*,int>&);
+int getgrandchild(Node *node,map<Node*,int>& mp)
+{
+    int s1=0,s2=0;
+    if(node==NULL)
+    return 0;
+    if(node->left)
+    s1=getsum(node->left->left,mp)+getsum(node->left->right,mp);
+    if(node->right)
+    s2=getsum(node->right->left,mp)+getsum(node->right->right,mp);
+    return s1+s2;
+}
+
+int getsum(Node *node,map<Node*,int>& mp)
+{
+    if(node==NULL)
+    return 0;
+    
+    if(mp.find(node)!=mp.end())
+    return mp[node];
+    
+    int incl=getgrandchild(node,mp)+node->data;
+    int excl=getsum(node->left,mp)+getsum(node->right,mp);
+    
+    int sum=max(incl,excl);
+    mp[node]=sum;
+    return sum;
+}
+
+class Solution{
+  public:
+    //Function to return the maximum sum of non-adjacent nodes.
+    int getMaxSum(Node *root) 
+    {
+        if(root==NULL)
+        return 0;
+     map<Node*,int> mp;
+    return getsum(root,mp);
+        // Add your code here
+    }
+};

@@ -1,0 +1,17 @@
+The diameter of a tree (sometimes called the width) is the number of nodes on the longest path between two end nodes.
+
+
+int diam(Node* root,int* h)
+{
+    int lh=0,rh=0,ld,rd;
+    if(root==NULL)
+    {
+        *h=0;
+        return 0;
+    }
+    ld=diam(root->left,&lh);
+    rd=diam(root->right,&rh);
+    *h=max(rh,lh)+1;
+    return max(rh+lh+1,max(ld,rd));
+    
+}

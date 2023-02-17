@@ -1,0 +1,24 @@
+///alternatively u could also use an array to store inorder traversal and check if it is sorted or not.
+
+class Solution
+{
+    public:
+    bool Solve(Node *root,Node *min,Node *max)
+    {
+        if(root==NULL)
+        return true;
+        if(min!=NULL&&root->data<=min->data)
+        return false;
+        if(max!=NULL&&root->data>=max->data)
+        return false;
+        return Solve(root->left,min,root)&&Solve(root->right,root,max);
+        
+    }
+    //Function to check whether a Binary Tree is BST or not.
+    bool isBST(Node* root) 
+    {
+        // Your code here
+    
+    return Solve(root,NULL,NULL);
+    }
+};

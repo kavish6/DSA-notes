@@ -1,0 +1,44 @@
+
+Given 2 Arrays of Inorder and preorder traversal. Construct a tree and print the Postorder traversal. 
+
+
+class Solution{
+    public:
+    int pri;
+    
+    Node* newNode(int d)
+{
+    Node* node=new Node(d);
+    node->left=NULL;
+    node->right=NULL;
+    node->data=d;
+    return (node);
+    
+}
+    
+    Node* buildT(int in[],int pre[],int is,int ie,unordered_map<int,int> &mp)
+{
+    if(is>ie) {
+        return NULL;
+    }
+    Node* t= newNode(pre[pri++]);
+    if(is==ie) {
+       return t;   
+    }
+    int ini=mp[t->data];
+    t->left=buildT(in,pre,is,ini-1,mp);
+    t->right=buildT(in,pre,ini+1,ie,mp);
+    return t;
+}
+
+    Node* buildTree(int in[],int pre[], int n)
+    {
+        // Code here
+        unordered_map<int,int> mp;
+        pri=0;
+        for(int i=0;i<n;i++) {
+            mp[in[i]]=i;
+        }
+        return buildT(in,pre,0,n-1,mp);
+    }
+};

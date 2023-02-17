@@ -1,0 +1,65 @@
+Given a Binary Tree with all unique values and two nodes value, n1 and n2. The task is to find the lowest common ancestor of the given two nodes. We may assume that either both n1 and n2 are present in the tree or none of them are present.
+
+//My code
+
+
+bool solve(Node* root,int n1,int n2,Node** z)
+{
+    bool f=false;
+    if(root==NULL)
+    return false;
+    if(root->data==n1||root->data==n2)
+    f=true;
+    bool left=solve(root->left,n1,n2,z);
+    bool right=solve(root->right,n1,n2,z);
+    if(right==true&&left==true||(f&&(left||right)))
+    {
+        *z=root;
+        return false;
+    }
+    if(right==true||left==true||f)
+    return true;
+    return false;
+}
+class Solution
+{
+    public:
+    //Function to return the lowest common ancestor in a Binary Tree.
+    Node* lca(Node* root ,int n1 ,int n2 )
+    {
+        Node *x=NULL;
+       bool u =solve(root,n1,n2,&x);
+       if(x==NULL)
+       {
+           Node *node=new Node(-1);
+           return node;
+       }
+        return x;
+       //Your code here 
+    }
+};
+
+
+
+// editorial code same logic just cleaner and smaller
+
+Node* LCA(Node* root, int n1, int n2)
+{
+    // Your code here
+    if (root == NULL)
+        return root;
+    if (root->data == n1 || root->data == n2)
+        return root;
+ 
+    Node* left = LCA(root->left, n1, n2);
+    Node* right = LCA(root->right, n1, n2);
+ 
+    if (left != NULL && right != NULL)
+        return root;
+    if (left == NULL && right == NULL)
+        return NULL;
+    if (left != NULL)
+        return left;
+ 
+    return right;
+}

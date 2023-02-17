@@ -1,0 +1,60 @@
+node *findTail(struct node* head)
+{
+    node* temp = head;
+    while(temp!=NULL&&temp->next!=NULL)
+    temp=temp->next;
+    return temp;
+}
+node* partition(struct node* start,struct node* tail,struct node **newhead,struct node **newtail)
+{
+    struct node *pivot=tail,*cur=start,*prev=NULL;
+    *newtail=tail;
+    while(cur!=pivot)
+    {
+        if(cur->data<pivot->data)
+        {
+            if(*newhead==NULL)
+            *newhead=cur;
+            prev=cur;
+            cur=cur->next;
+        }
+        else
+        {
+            if(prev)
+            prev->next=cur->next;
+            node *tmp=cur->next;
+            cur->next=NULL;
+            tail->next=cur;
+            tail=cur;
+            cur=tmp;
+        }
+    }
+    if(*newhead==NULL)
+    *newhead=pivot;
+    *newtail=tail;
+    return pivot;
+}
+node* qlsort(struct node* head,struct node* tail)
+{
+    if(head==NULL||head==tail)
+    return head;
+    node* newhead=NULL,*newtail=NULL;
+    node *pivot=partition(head,tail,&newhead,&newtail);
+    if(pivot!=newhead)
+    {
+        node *tmp=newhead;
+        while(tmp->next!=pivot)
+        tmp=tmp->next;
+        tmp->next=NULL;
+        newhead=qlsort(newhead,tmp);
+        tmp=findTail(newhead);
+        tmp->next=pivot;
+    }
+    pivot->next=qlsort(pivot->next,newtail);
+    return newhead;
+}
+//you have to complete this function
+void quickSort(struct node **headRef) {
+    node* tail=findTail(*headRef);
+    *headRef=qlsort(*headRef,tail);
+}

@@ -1,0 +1,39 @@
+Given a binary tree and an integer K. Find the number of paths in the tree which have their sum equal to K.
+A path may start from any node and end at any node in the downward direction.
+
+
+/*Basically u are using the logic of zero sum subarray or k sum subarray,u are reducing the counter at the end as u do not want the values added in the left subtree to be used in the right one.
+*/
+
+
+
+
+const unsigned int M = 1000000007;
+class Solution{
+  public:
+    void solve(Node *root, int k,int curr, int &ans,unordered_map<int,int>& mp){
+        if(! root) return ;
+        if(ans/M>0)
+        ans=ans%M;
+        int temp=curr+root->data;
+        if(mp.find(temp-k)!=mp.end())
+        {
+            ans+=mp[temp-k];
+        }
+        mp[temp]++;
+        if(ans/M>0)
+        ans=ans%M;
+        solve(root->left,k,temp,ans,mp);
+        solve(root->right,k,temp,ans,mp);
+        mp[temp]--;
+    }
+    int sumK(Node *root,int k)
+    {
+        // code here 
+        unordered_map<int,int> mp;
+        mp[0]=1;
+        int ans = 0;
+        solve(root,k,0,ans,mp);
+        return ans;
+    }
+};

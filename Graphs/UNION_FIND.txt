@@ -1,0 +1,42 @@
+This problem is to implement disjoint set union. There will be 2 incomplete functions namely union and find. You have to complete these functions. 
+//given algo is optimized by using path compression and union by rank
+
+
+class Solution
+{
+    public:
+    //Function to merge two nodes a and b.
+    int findRoot(int a,int par[])
+    {
+        while(a!=par[a])
+        {
+            a=par[a];
+        }
+        return a;
+    }
+    
+    void union_( int a, int b, int par[], int rank1[]) 
+    {
+        
+        int x= findRoot(a,par);
+        int y= findRoot(b,par);
+        if(rank1[x]>=rank1[y])
+        {
+            rank1[x]++;
+            par[y]=x;
+        }
+        else
+        {
+            rank1[y]++;
+            par[x]=y;
+        }
+        //code here
+    }
+    
+    //Function to check whether 2 nodes are connected or not.
+    bool isConnected(int x,int y, int par[], int rank1[])
+    {
+        return (findRoot(x,par)==findRoot(y,par));
+        //code here
+    }
+};

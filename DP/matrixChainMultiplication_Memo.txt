@@ -1,0 +1,30 @@
+class Solution{
+public:
+    int t[100][100];
+    Solution()
+    {
+        memset(t,-1,sizeof(t));
+    }
+    int solve(int arr[],int i,int j)
+    {
+        if(i>=j)
+        return 0;
+        if(t[i][j]!=-1)
+        return t[i][j];
+        int mn=INT_MAX;
+        for(int k=i;k<=j-1;k++)
+        {
+            int c1=solve(arr,i,k);
+            int c2=solve(arr,k+1,j);
+            int c3=arr[i-1]*arr[k]*arr[j];
+            mn=min(mn,c1+c2+c3);
+        }
+        return t[i][j]=mn;
+        
+    }
+    int matrixMultiplication(int N, int arr[])
+    {
+        return solve(arr,1,N-1);
+        // code here
+    }
+};

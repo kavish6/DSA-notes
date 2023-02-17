@@ -1,0 +1,42 @@
+int recu(string& s,string& t,int i,int j)
+	{
+		if(i==0 and j==0)return 0;
+		
+		if(i==0)return j;
+		if(j==0)return i;
+		
+		if(s[i-1]==t[j-1])return recu(s,t,i-1,j-1);
+		
+		int s1=1+recu(s,t,i-1,j);
+		int s2=1+recu(s,t,i,j-1);
+		int rep=1+recu(s,t,i-1,j-1);
+		return min(min(s1,s2),rep);
+	}
+  
+    int editDistance(string s, string t) {
+        
+        int dp[101][101];
+        dp[0][0]=0;
+        
+        for(int j=1;j<=t.size();j++)
+        {
+            dp[0][j]=j;
+        }
+        
+        for(int i=1;i<=s.size();i++)
+        {
+            dp[i][0]=i;
+        }
+        
+        for(int i=1;i<=s.size();i++)
+        {
+            for(int j=1;j<=t.size();j++)
+            {
+                if(s[i-1]==t[j-1])dp[i][j]=dp[i-1][j-1];
+                else
+                dp[i][j]=min(1+dp[i-1][j-1],min(1+dp[i-1][j],1+dp[i][j-1]));
+            }
+        }
+        return dp[s.size()][t.size()];
+		//return recu(s,t,s.size(),t.size());
+    }

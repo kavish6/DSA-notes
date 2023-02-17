@@ -1,0 +1,66 @@
+Given an integer array nums that may contain duplicates, return all possible
+subsets(the power set).
+The solution set must not contain duplicate subsets. Return the solution in any order.
+
+
+Intuition code my own:
+
+LOGIC : IF YOU ARE NOT TAKING A PREVIOUS DUPLICATE THEN THE ONLY CHOICE FOR FURTHER DUPLICATES IS NOT TO TAKE THEM AND IF YOU TAKE 2 DUPLICATES THEN YOU STILL HAVE TO CHOOSE TO EITHER MAKE 3 OF IT OR ONLY 2.
+
+
+class Solution {
+public:
+    void solve(vector<int>& nums,int ind,vector<int> curr,vector<vector<int>>& ans,bool tp)
+    {
+        if(ind==nums.size())
+        {
+            ans.push_back(curr);
+            return;
+        }
+        if(ind>0&&nums[ind]==nums[ind-1]&&!tp)
+        {
+        solve(nums,ind+1,curr,ans,false);
+        }
+        else
+        {
+        solve(nums,ind+1,curr,ans,false);
+        curr.push_back(nums[ind]);
+        solve(nums,ind+1,curr,ans,true);
+        }
+    }
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+     vector<vector<int>> ans;
+     vector<int> curr;
+     sort(nums.begin(),nums.end());
+     solve(nums,0,curr,ans,true);
+     return ans;   
+    }
+};
+
+
+
+// strivers solution
+
+class Solution {
+public:
+    void solve(vector<int>& nums,int ind,vector<int> curr,vector<vector<int>>& ans)
+    {
+        ans.push_back(curr);
+        for(int i=ind;i<nums.size();i++)
+        {
+            if(i!=ind&&nums[i]==nums[i-1])
+            continue;
+            curr.push_back(nums[i]);
+            solve(nums,i+1,curr,ans);
+            curr.pop_back();
+        }
+    }
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+     vector<vector<int>> ans;
+     vector<int> curr;
+     sort(nums.begin(),nums.end());
+     solve(nums,0,curr,ans);
+     return ans;   
+    }
+};
+

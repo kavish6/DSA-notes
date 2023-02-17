@@ -1,0 +1,18 @@
+int dp[1001][1001];
+    int solvee(string x,string y,int i,int j)
+    {
+        if(i==x.length()||j==y.length())
+        return 0;
+        if(dp[i][j]!=-1)
+        return dp[i][j];
+        if(x[i]==y[j])
+        return dp[i][j]= 1+solvee(x,y,i+1,j+1);
+        else
+        return dp[i][j]= max(solvee(x,y,i+1,j),solvee(x,y,i,j+1));
+    }
+    //Function to find the length of longest common subsequence in two strings.
+    int lcs(int x, int y, string s1, string s2)
+    {
+        memset(dp,-1,sizeof(dp));
+        return solvee(s1,s2,0,0);
+   }

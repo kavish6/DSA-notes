@@ -1,0 +1,88 @@
+search in an array which was sorted then rotated
+read both approaches scroll down for the next approach
+//1.approach first find rotation point
+int binarysearch(vector<int> &nums,int high,int low,int target)
+    {
+       while(high>=low)
+       {
+           int mid=(high+low)/2;
+           if(nums[mid]==target)
+               return mid;
+           else if(nums[mid]>target)
+               high=mid-1;
+           else
+               low=low+1;
+       }
+        return -1;
+    }
+    int search(vector<int>& nums, int target) {
+        int low=0,high=nums.size()-1;
+        int infp=-1;
+        while(high>=low)
+        {
+           int mid=low+((high-low)/2);
+            if(mid!=(nums.size()-1)&&nums[mid]>nums[mid+1])
+            {
+                 infp=mid;
+                 break;
+            }
+            if(mid!=0&&nums[mid-1]>nums[mid])
+            {
+                 infp=mid-1;
+                 break;
+            }
+            if(nums[low]>nums[high])
+            {
+             if(nums[mid]>nums[low])
+            {
+                low=mid+1;
+            }
+            else
+                high=mid-1;
+            }
+        else
+            break;
+    }
+        if(infp==-1)
+           return binarysearch(nums,nums.size()-1,0,target);
+        else
+        {
+            if(target>=nums[0])
+            {
+                return binarysearch(nums,infp,0,target);
+            }
+            else
+                return binarysearch(nums,nums.size()-1,infp+1,target);
+        }
+            
+    }
+};
+
+
+//2.using the concept that one side of mid has to be sorted.
+
+int beg=0,end=nums.size()-1,mid;
+        while(beg<=end)
+        {
+            mid=(beg+end)/2;
+            if(nums[mid]==target)
+                return mid;
+            if(nums[beg]<=nums[mid])
+            {
+                if(target<=nums[mid] && target>=nums[beg])
+                    end=mid-1;
+                else
+                    beg=mid+1;
+            }
+            
+            else
+            {
+                if(target>=nums[mid] && target<=nums[end])
+                   beg=mid+1;
+                else
+                    end=mid-1;
+            }
+            
+        }
+        return -1;
+    }

@@ -1,0 +1,28 @@
+class Solution {
+public:
+    double myPow(double x, int n) {
+        double ans=1.0;
+       long long nn=n;
+       if(n<0)nn=-1*nn;
+        while(nn>0)
+        {
+            if(nn%2==0)
+            {
+                x=x*x;
+                nn=nn/2;
+            }   
+            else
+            {
+                ans=ans*x;
+                nn=nn-1;
+            }
+        }
+        if(n<0)
+        return double(1.0)/double(ans);
+        return double(ans);
+    }
+};
+
+
+basically write (4)^4 as (16)^2 or (4)^3 as 4*(4)^2
+when even make the base as base*base and pow ans pow/2, when odd make ans=ans*base and pow=pow-1; 

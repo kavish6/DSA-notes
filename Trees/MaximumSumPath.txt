@@ -1,0 +1,21 @@
+void solve(Node *root,int& sum,int &msum)
+    {
+        if(root==NULL)
+        return;
+        int lsum=0,rsum=0;
+        solve(root->left,lsum,msum);
+        solve(root->right,rsum,msum);
+        if(lsum<0)
+        lsum=0;
+        if(rsum<0)
+        rsum=0;
+        sum=root->data+max(lsum,rsum);
+        msum=max(msum,max(sum,root->data+rsum+lsum));
+    }
+    int findMaxSum(Node* root)
+    {
+        int msum=INT_MIN,sum=0;
+        solve(root,sum,msum);
+        return msum;
+        // Your code goes here
+    }

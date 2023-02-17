@@ -1,0 +1,57 @@
+There are n servers numbered from 0 to n - 1 connected by undirected server-to-server connections forming a network where connections[i] = [ai, bi] represents a connection between servers ai and bi. Any server can reach other servers directly or indirectly through the network.
+
+A critical connection is a connection that, if removed, will make some servers unable to reach some other server.
+
+Return all critical connections in the network in any order.
+
+
+
+class Solution {
+public:
+    void solve(int i,vector<int> adj[],vector<bool>& vis,vector<int>& disc,vector<int>& low,int& time,vector<vector<int>>& ans,vector<int>& par)
+    {
+        vis[i]=true;
+        disc[i]=++time;
+        low[i]=disc[i];
+        for(auto it:adj[i])
+        {
+            if(!vis[it])
+            {
+                par[it]=i;
+                vis[it]=true;
+                solve(it,adj,vis,disc,low,time,ans,par);
+                low[i]=min(low[i],low[it]);
+                if(low[it]>disc[i])
+                {
+                    vector<int> tp;
+                    tp.push_back(i);
+                    tp.push_back(it);
+                   ans.push_back(tp); 
+                }
+            }
+            else if(it!=par[i])
+            {
+                low[i]=min(low[i],disc[it]);
+            }
+        }
+        
+    }
+    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
+    vector<int> low(n,0),disc(n,0);
+        vector<bool> vis(n,false);
+        vector<vector<int>> ans;
+        vector<int> adj[n];
+        vector<int> par(n,-1);
+        for(int i=0;i<connections.size();i++)
+        {
+            adj[connections[i][0]].push_back(connections[i][1]);
+            adj[connections[i][1]].push_back(connections[i][0]);
+        }
+        int time=0;
+        for(int i=0;i<n;i++)
+        {
+            solve(i,adj,vis,disc,low,time,ans,par);
+        }
+        return ans;
+    }
+};

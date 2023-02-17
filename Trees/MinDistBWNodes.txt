@@ -1,0 +1,47 @@
+Given a binary tree and two node values your task is to find the minimum distance between them.
+
+
+
+
+int ans;
+//Function that finds distance between two node.
+int _findDistance(Node* root, int n1, int n2)
+{
+    if (!root) return 0;
+    int left = _findDistance(root->left, n1, n2);
+    int right = _findDistance(root->right, n1, n2);
+      //if any node(n1 or n2) is found
+    if (root->key == n1 || root->key == n2)
+    {   
+          //check if their is any descendant(n1 or n2)
+          //if descendant exist then distance between descendant
+          //and current root will be our answer.
+        if (left || right)
+        {
+            ans = max(left, right);
+            return 0;
+        }
+        else
+            return 1;
+    }
+      //if current root is LCA of n1 and n2.
+    else if (left && right)
+    {   
+        ans = left + right;
+        return 0;
+    }
+      //if their is a descendant(n1 or n2).
+    else if (left || right)
+          //increment its distance
+        return max(left, right) + 1;
+    //if neither n1 nor n2 exist as descendant.
+    return 0;
+}
+// The main function that returns distance between n1
+// and n2.
+int findDistance(Node* root, int n1, int n2)
+{
+    ans = 0;
+    _findDistance(root, n1, n2);
+    return ans;
+}

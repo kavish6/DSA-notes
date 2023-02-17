@@ -1,0 +1,35 @@
+void dfs(Node *root,vector<int>& in)
+{
+    if(root==NULL)
+    return ;
+    dfs(root->left,in);
+    in.push_back(root->data);
+    dfs(root->right,in);
+}
+void add(Node *root,vector<int>& in,int & i)
+{
+ if(root==NULL)
+ return;
+ add(root->left,in,i);
+ if(i!=in.size())
+ {
+ root->data=in[i++];
+}
+ add(root->right,in,i);
+}
+class Solution{
+  public:
+    // The given root is the root of the Binary Tree
+    // Return the root of the generated BST
+    Node *binaryTreeToBST (Node *root)
+    {
+        vector<int> inorder;
+        dfs(root,inorder);
+        sort(inorder.begin(),inorder.end());
+        int i=0;
+        add(root,inorder,i);
+        return root;
+        
+        //Your code goes here
+    }
+};

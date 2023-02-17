@@ -1,0 +1,19 @@
+
+Given an array of positive and negative numbers, find if there is a subarray (of size at-least one) with 0 sum.
+
+We can also use hashing. The idea is to iterate through the array and for every element arr[i], calculate the sum of elements from 0 to i (this can simply be done as sum += arr[i]). If the current sum has been seen before, then there is a zero-sum array. Hashing is used to store the sum values so that we can quickly store sum and find out whether the current sum is seen before or not.
+   
+bool subArrayExists(int arr[], int n)
+    {
+        int sum=0;
+        unordered_set<int> sset;
+        //Your code here
+        for(int i=0;i<n;i++)
+        {
+         sum+=arr[i];
+         if(sum==0||(sset.find(sum)!=sset.end()))
+         return true;
+         sset.insert(sum);
+        }
+        return false;
+    }

@@ -1,0 +1,45 @@
+Given an array of n positive integers. Find the sum of the maximum sum subsequence of the given array such that the integers in the subsequence are sorted in strictly increasing order i.e. a strictly increasing subsequence. 
+
+This approach is basically watched from striver's video us calculate the the required for every element and take the max from that ,to calculate for every element basically initialize all as their own value then use the values of the previously occured and smaller than them to calc their value .
+
+	int maxSumIS(int arr[], int n)  
+	{ 
+	    int dp[n+1];
+	    int maxi=0;
+	    for(int i=0;i<n;i++)
+	    dp[i]=arr[i];
+	    for(int i=0;i<n;i++)
+	    {
+	        for(int j=0;j<i;j++)
+	        {
+	            if(arr[i]>arr[j])
+	            {
+	                dp[i]=max(dp[i],arr[i]+dp[j]);
+	            }
+	        }
+	        maxi=max(maxi,dp[i]);
+	    }
+	    return maxi;
+	    // Your code goes here
+	}
+
+This is the solution achieved by converting memoized 2d dp to iterative 2d dp and then reducing 2d dp to 1d dp.
+	int maxSumIS(int arr[], int n)  
+	{ 
+	   int dp[n+2];
+	   memset(dp,0,sizeof(dp));
+	   for(int i=n;i>0;i--)
+	   {
+	       for(int j=0;j<i;j++)
+	       {
+	           if(arr[i-1]>(j==0?-1:arr[j-1]))
+	           {
+	               dp[j]=max(dp[i]+arr[i-1],dp[j]);
+	           }
+	           else
+	           dp[j]=dp[j];
+	       }
+	   }
+	   return dp[0];
+	    // Your code goes here
+	}  
