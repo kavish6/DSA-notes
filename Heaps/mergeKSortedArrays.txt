@@ -1,0 +1,32 @@
+Given K sorted arrays arranged in the form of a matrix of size K*K. The task is to merge them into one sorted array.
+
+
+
+
+LOGIC: You push first element of all arrays in a min heap then pop the top and move forward in that array and push that element to heap continue to do this till all elements are done
+store pair<element,<array no,index in that array> in min heap
+class Solution
+{
+    public:
+    //Function to merge k sorted arrays.
+    vector<int> mergeKArrays(vector<vector<int>> arr, int K)
+    {
+        vector<int> ans;
+        priority_queue<pair<int,pair<int,int>>,vector<pair<int,pair<int,int>>>,greater<pair<int,pair<int,int>>>> pq;
+        for(int i=0;i<K;i++)
+        {
+            pq.push({arr[i][0],{i,0}});
+        }
+        while(!pq.empty())
+        {
+            auto z=pq.top();
+            ans.push_back(z.first);
+            pq.pop();
+            if(z.second.second<K-1)
+            pq.push({arr[z.second.first][z.second.second+1],{z.second.first,z.second.second+1}});
+        }
+        return ans;
+        //code here
+    }
+};
+
