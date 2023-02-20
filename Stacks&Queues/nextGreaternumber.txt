@@ -1,37 +1,35 @@
-Given an array arr[ ] of size N having distinct elements, the task is to find the next greater element for each element of the array in order of their appearance in the array.
-Next greater element of an element in the array is the nearest element on the right which is greater than the current element.
-If there does not exist next greater of current element, then next greater element for current element is -1. For example, next greater of the last element is always -1. 
+Given a circular integer array nums (i.e., the next element of nums[nums.length - 1] is nums[0]), return the next greater number for every element in nums.
 
+The next greater number of a number x is the first greater number to its traversing-order next in the array, which means you could search circularly to find its next greater number. If it doesn't exist, return -1 for this number.
 
-vector<long long> nextLargerElement(vector<long long> arr, int n){
-        // Your code here
-        stack<long long> s;
-        vector<long long> res(n,-1);
-        s.push(arr[n-1]);
-        res[n-1]=-1;
-        for(int i=1;i<n;i++)
+LOGIC:You basically traverse the array two times for the end and maintain a stack which has elements in descending order and when you get to the initial array you check if stack has elements lesser than it you pop them and then put the stack.top() as next greater element for that index and then push that element to the stack and continue leftwards.
+
+class Solution {
+public:
+    vector<int> nextGreaterElements(vector<int>& nums) {
+        stack<int> st;
+        vector<int> ans(nums.size(),-1);
+        for(int i=nums.size()*2 - 1;i>=0;i--)
         {
-            if(arr[n-1-i]<s.top())
+            while(!st.empty()&&nums[st.top()]<=nums[i%nums.size()])
             {
-                res[n-1-i]=s.top();
-                s.push(arr[n-1-i]);
+                st.pop();
             }
-            else
+            if(i<nums.size())
             {
-                while(s.empty()==false&&arr[n-1-i]>s.top())
+                if(!st.empty())
                 {
-                    s.pop();
-                }
-                if(s.empty())
-                {
-                    res[n-1-i]=-1;
+                    ans[i]=nums[st.top()];
                 }
                 else
-                {
-                    res[n-1-i]=s.top();
-                }
-                 s.push(arr[n-1-i]);
+                ans[i]=-1;
             }
+            st.push(i%nums.size());
         }
-        return res;
+        return ans;
     }
+};
+
+
+
+
