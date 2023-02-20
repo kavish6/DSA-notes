@@ -1,3 +1,8 @@
+
+LOGIC:you make a max heap and then extract max and put it at the end of the array and then continue to this till size of heap is 0 so you will have array sorted in ascending order.
+
+
+
 class Solution
 {
     public:
