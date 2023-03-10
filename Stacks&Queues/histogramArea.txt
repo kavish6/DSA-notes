@@ -1,7 +1,64 @@
 Find the largest rectangular area possible in a given histogram where the largest rectangle can be made of a number of contiguous bars. For simplicity, assume that all bars have the same width and the width is 1 unit, there will be N bars height of each bar will be given by the array arr.
   
-gfg link:there is one more way to do this by using leftsmalller and rightsmaller arrays
-https://www.geeksforgeeks.org/largest-rectangle-under-histogram/
+  
+TWO PASS SOLUTION
+Logic: you maintain two arrays one for leftsmaller and one for right smaller, you make these using stack. then you iterate the array and take each element as height and calculate width using nse and pse arrays.
+
+
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        vector<int> nse(heights.size(),-1),pse(heights.size(),-1);
+        stack<int> st,pt;
+        int ma=INT_MIN;
+        for(int i=heights.size()-1;i>=0;i--)
+        {
+            while(st.size()>0&&heights[st.top()]>=heights[i])
+            {
+                st.pop();
+            }
+            if(st.size()==0)
+            {
+                nse[i]=-1;
+            }
+            else
+            {
+                nse[i]=st.top();
+            }
+            st.push(i);
+        }
+        for(int i=0;i<heights.size();i++)
+        {
+            while(pt.size()>0&&heights[pt.top()]>=heights[i])
+            {
+                pt.pop();
+            }
+            if(pt.size()==0)
+            {
+                pse[i]=-1;
+            }
+            else
+            {
+                pse[i]=pt.top();
+            }
+            pt.push(i);
+        }
+        for(int i=0;i<heights.size();i++)
+        {
+            int temp=0;
+            int width=(pse[i]==-1?i:i-pse[i]-1)+(nse[i]==-1?heights.size()-i:nse[i]-i);
+            ma=max(ma,width*heights[i]);
+        }
+        return ma;
+    }
+};
+
+
+One PASS SOLUTION
+
+logic : you iterate the array while keeping a stack that has elements in the logic with which you calculate the left smaller element.basically you get right smaller from the index that you are at and take height as the larger element which is at top of stack then pop the stack and take the current top as left smaller.
+	when the array ends take the i=n as right smaller and use all the elements left in the stack with same logic.
+
 
 long long getMaxArea(long long arr[], int n)
     {
