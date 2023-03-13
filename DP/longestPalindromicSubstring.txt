@@ -1,0 +1,50 @@
+Given a string s, return the longest palindromic substring in s.
+
+LOGIC: YOU BASICALLY MAKE THE CHECK FOR IF A PARTICULAR STRING IS PALINDROME OR NOT TO O(1) BY STORING THE PALINDROMIC NATURE OF ALL THE STRINGS OF LESSER LENGTHS WITH THE SAME START POINT AND USE THAT TO GET THE PALINDROMIC STATUS OF THE CURRENT STRING THE RECURRENCE RELATION IS AS FOLLOWS:
+IF  YOU WANT TO KNOW IF PALINDROME WITH START =I AND END =J 
+IT IS PALINDROME IF STRING[I]==STRING[J] && PALINDROME[I+1][J-1] IS TRUE
+YOU ALSO FILL THE TABLE EARLIER FOR ALL START POINTS WITH LENGTH AS 1 AND THEN AS TWO AND THEN USE IT AS INCREMENTING THE LENGTH FOR ALL START POINTS(NESTED LOOP WITH ABOVE LOOP AS LENGTH AND INNER AS STARTING POINT).
+
+TC:O(n^2)
+SC:O(n^2)
+
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        int start=0,end=1;
+        int l=s.length();
+        int dp[l][l];
+        memset(dp,0,sizeof(dp));
+        for(int i=0;i<l;i++)
+        {
+            dp[i][i]=1;
+        }
+        for(int i=0;i<l-1;i++)
+        {
+            if(s[i]==s[i+1])
+            {
+                dp[i][i+1]=1;
+                start=i;
+                end=2;
+            }
+        }
+        for(int i=2;i<l;i++)
+        {
+            for(int j=0;j<l-i;j++)
+            {
+                if(s[j]==s[j+i])
+                {
+                    if(dp[j+1][i+j-1])
+                    {
+                        dp[j][i+j]=1;
+                       
+                            start=j;
+                            end=i+1;
+                        
+                    }
+                }
+            }
+        }
+        return s.substr(start,end);
+    }
+};
