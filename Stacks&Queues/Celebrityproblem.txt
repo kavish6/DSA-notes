@@ -3,6 +3,48 @@ A square NxN matrix M[][] is used to represent people at the party such that if 
 Note: Follow 0 based indexing.
 
 
+Two pointer Approach : o(n) and O(1)
+LOGIC: YOU FIRST TAKE TWO POINTERS AND ELIMINATE PEOPLE IF THEY KNOW ANYONE AS I=0 AND J=N-1 SO IF J KNOWS I THEN J-- AND IF NOT THEN I++.
+	
+
+
+
+int celebrity(vector<vector<int> >& M, int n) 
+    {
+     
+        int i=0,j=n-1;
+        while(i<j)
+        {
+            if(M[j][i])
+            {
+                j--;
+            }
+            else
+            {
+                i++;
+            }
+        }
+        for(int x=0;x<n;x++)
+        {
+            if(x!=i)
+            {
+                if(M[x][i]==0||M[i][x]==1)
+                {
+                    return -1;
+                }
+            }
+        }
+        return i;
+        
+        // code here 
+    }
+
+
+
+
+
+Stack Approach:o(n) and o(n)
+
 You can use a stack based approach like this(or u can search this on gfg and use the two pointer method much better than this and simpler and this one has o(n) time and o(n) space complexity while two pointer has only o(n) time and o(1) space complexity):
 
 
