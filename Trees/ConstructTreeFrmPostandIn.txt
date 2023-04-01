@@ -1,0 +1,37 @@
+Given two integer arrays inorder and postorder where inorder is the inorder traversal of a binary tree and postorder is the postorder traversal of the same tree, construct and return the binary tree.
+
+
+
+LOGIC : the last element of a preorder traversal is the root of the tree then find the position of it in the inorder and the elements on the left in inorder are in left subtree and the elements on the right are in the right subtree now solve recursively by using this logic and adjusting the start and end indexes for the postorder array and the inorder array accordingly. use a map to store indexes of values in the inorder array.
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* solve(vector<int>& inorder, vector<int>& postorder,int is,int ie,int pos,int poe,map<int,int>& mp)
+    {
+        if(is>ie||pos>poe)
+        return NULL;
+        TreeNode* node=new TreeNode(postorder[poe]);
+        int i=mp[node->val];
+        node->right=solve(inorder,postorder,i+1,ie,poe-(ie-i),poe-1,mp);
+        node->left=solve(inorder,postorder,is,i-1,pos,poe-(ie-i)-1,mp);
+        return node;
+    }
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        map<int,int> mp;
+        int is=0,ie=inorder.size()-1,pos=0,poe=postorder.size()-1;
+        for(int i=0;i<inorder.size();i++)
+        mp[inorder[i]]=i;
+        return solve(inorder,postorder,is,ie,pos,poe,mp);
+    }
+};

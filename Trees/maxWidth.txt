@@ -1,0 +1,47 @@
+Given the root of a binary tree, return the maximum width of the given tree.
+
+The maximum width of a tree is the maximum width among all levels.
+
+The width of one level is defined as the length between the end-nodes (the leftmost and rightmost non-null nodes), where the null nodes between the end-nodes that would be present in a complete binary tree extending down to that level are also counted into the length calculation.
+
+It is guaranteed that the answer will in the range of a 32-bit signed integer.
+
+LOGIC: YOU BASICALLY USE THE INDEXING THAT IS IN COMPLETE BINARY TREE AS LEFT CHILD IS INDEX OF THAT NODE*2 +1 AND RIGHT CHILD IS INDEX OF THAT NODE*2 +2
+       THEN TO CONTROL OVERFLOW YOU START CREATING INDEX AT EVERY LEVEL AS THE DIFFERENCE WILL BE STILL SAME.
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int widthOfBinaryTree(TreeNode* root) {
+        int ans=INT_MIN;
+        queue<pair<TreeNode*,long long>> q;
+        q.push({root,0});
+        while(!q.empty())
+        {
+            int n=q.size();
+            long long s=q.front().second;
+            ans=max((int)(q.back().second-q.front().second+1),ans);
+            for(int i=0;i<n;i++)
+            {
+                auto x=q.front();
+                q.pop();
+                long long index=x.second-s;
+                if(x.first->left)
+                q.push({x.first->left,index*2+1});
+             if(x.first->right)
+                q.push({x.first->right,index*2+2});
+            }
+        }
+        return ans;
+    }
+};
