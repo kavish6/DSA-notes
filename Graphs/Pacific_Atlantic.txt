@@ -1,0 +1,69 @@
+Pacific Atlantic Water Flow
+
+There is an m x n rectangular island that borders both the Pacific Ocean and Atlantic Ocean. The Pacific Ocean touches the island's left and top edges, and the Atlantic Ocean touches the island's right and bottom edges.
+
+The island is partitioned into a grid of square cells. You are given an m x n integer matrix heights where heights[r][c] represents the height above sea level of the cell at coordinate (r, c).
+
+The island receives a lot of rain, and the rain water can flow to neighboring cells directly north, south, east, and west if the neighboring cell's height is less than or equal to the current cell's height. Water can flow from any cell adjacent to an ocean into the ocean.
+
+Return a 2D list of grid coordinates result where result[i] = [ri, ci] denotes that rain water can flow from cell (ri, ci) to both the Pacific and Atlantic oceans.
+
+
+
+
+
+LOGIC:YOU MAKE TWO VISITED ARRAYS ONE FOR PACIFIC AND ONE FOR ATLANTIC AND START DFS FROM ALL THE POINTS CONNECTED DIRECTLY TO EACH OCEANS AND PASS THE RESPECTIVE VISITED ARRAYS, THIS WILL GIVE YOU THE POINTS THAT ARE CONNECTED TO THE BOUNDARIES FOR THE OCEANS IF THE VISITED ARRAY IS TRUE FOR BOTH PACIFIC AND ATLANTIC FOR A POINT IT CAN BE REACHED FROM BOTH THE OCEANS. REMEMBER TO REVERSE THE RULE FOR THE WATER TO FLOW AS YOU ARE GOING FROM OCEAN TO LAND SO NEXT POINT SHOULD HAVE HIGHER OR EQUAL HEIGHT THAN CURRENT.
+
+
+
+
+class Solution {
+    private:
+    bool isValid(int i,int j,int n,int m)
+    {
+        return i>=0&&i<n&&j>=0&&j<m;
+    }
+public:
+    void dfs(vector<vector<int>>& heights,int i,int j,vector<vector<bool>> &vis)
+    {
+        vis[i][j]=true;
+        int dx[]={1,0,-1,0};
+        int dy[]={0,-1,0,1};
+        for(int k=0;k<4;k++)
+        {
+            int ni=dx[k]+i,nj=j+dy[k];
+            if(isValid(ni,nj,heights.size(),heights[0].size())&&!vis[ni][nj]&&heights[ni][nj]>=heights[i][j])
+            {
+                dfs(heights,ni,nj,vis);
+            }
+        }
+    }
+    vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {
+        int n=heights.size(),m=heights[0].size();
+        vector<vector<bool>> pac(n,vector<bool>(m,false)),atl(n,vector<bool>(m,false));
+        vector<vector<int>> ans;
+        
+        for(int i=0;i<m;i++)
+        {
+            dfs(heights,0,i,pac);
+            dfs(heights,n-1,i,atl);
+        }
+
+        for(int i=0;i<n;i++)
+        {
+            dfs(heights,i,0,pac);
+            dfs(heights,i,m-1,atl);
+        }
+
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<m;j++)
+            {
+                if(pac[i][j]&&atl[i][j])
+                ans.push_back({i,j});
+            }
+        }
+        return ans;
+
+          }
+};

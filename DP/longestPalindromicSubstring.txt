@@ -1,6 +1,49 @@
 Given a string s, return the longest palindromic substring in s.
 
-LOGIC: YOU BASICALLY MAKE THE CHECK FOR IF A PARTICULAR STRING IS PALINDROME OR NOT TO O(1) BY STORING THE PALINDROMIC NATURE OF ALL THE STRINGS OF LESSER LENGTHS WITH THE SAME START POINT AND USE THAT TO GET THE PALINDROMIC STATUS OF THE CURRENT STRING THE RECURRENCE RELATION IS AS FOLLOWS:
+LOGIC: make all even and odd palindromic string which have midpoint at i and check their lengths. basically run a loop for i and take i as center point and first generate all odd palindromic substrings then all even ones as given below. 
+
+TC:O(N^2)
+SC:O(1)
+
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        int n=s.length();
+        int maxLen=INT_MIN;
+        string ans="";
+        for(int i=0;i<n;i++)
+        {
+            int j=i,k=i;
+            while(j>=0&&k<n&&s[j]==s[k])
+            {
+                    if(maxLen<k-j+1)
+                    {
+                    maxLen=k-j+1;
+                    ans=s.substr(j,k-j+1);
+                    }
+                    j--;
+                    k++;
+            }
+            int x=i,y=i+1;
+            while(x>=0&&y<n&&s[x]==s[y])
+            {
+                    if(maxLen<y-x+1)
+                    {
+
+                    maxLen=y-x+1;
+                    ans=s.substr(x,y-x+1);
+                    }
+                    x--;
+                    y++;
+            }
+        }
+        return ans;
+    }
+};
+
+
+
+LOGIC: YOU BASICALLY MAKE THE CHECK FOR IF A PARTICULAR STRING IS PALINDROME OR NOT BY STORING THE PALINDROMIC NATURE OF ALL THE STRINGS OF LESSER LENGTHS WITH THE SAME START POINT AND USE THAT TO GET THE PALINDROMIC STATUS OF THE CURRENT STRING THE RECURRENCE RELATION IS AS FOLLOWS:
 IF  YOU WANT TO KNOW IF PALINDROME WITH START =I AND END =J 
 IT IS PALINDROME IF STRING[I]==STRING[J] && PALINDROME[I+1][J-1] IS TRUE
 YOU ALSO FILL THE TABLE EARLIER FOR ALL START POINTS WITH LENGTH AS 1 AND THEN AS TWO AND THEN USE IT AS INCREMENTING THE LENGTH FOR ALL START POINTS(NESTED LOOP WITH ABOVE LOOP AS LENGTH AND INNER AS STARTING POINT).

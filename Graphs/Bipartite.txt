@@ -4,53 +4,35 @@ check if a graph is bipartitie or not (bipartite means if its vertices can be pu
 // we think of all vertices having one of 2 colors if adjacent vertices have same color the graph is not bipartite
 
 
- bool dfs(int i,vector<int> adj[],vector<bool>& vis,vector<int>& col,int par)
+LOGIC : WE USE DFS WITH 2 COLORING ALGORITHM WE CHECK IF THE GRAPH CAN WE COLORED WITH 2 COLORS WITH NO CONSECUTIVE NODES HAVING THE SAME COLOR, WE USE A COLOR ARRAY AND ASSIGN A COLOR TO THE FIRST NODE THEN DO DFS AND CHECK FOR ALL CONNECTED NODES BY ASSIGNING ALTERNATE COLORS AND IF WE CANNOT THEN WE RETURN FALSE.
+
+bool dfs(int i,vector<vector<int>> & graph,vector<int>& col,int c)
+  {
+    col[i]=c;
+    for(auto x:graph[i])
     {
-        vis[i]=true;
-        if(par==-1)
-        col[i]=1;
-        else
-        {
-            if(col[i]==0)
-            {
-                col[i]=-col[par];
-            }
-            else
-            {
-                if(col[i]==col[par])
-                return true;
-            }
-        }
-        for(auto it:adj[i])
-        {
-            par=i;
-            if(!vis[it])
-            {
-                vis[it]=true;
-                if(dfs(it,adj,vis,col,par))
-                return true;
-            }
-            else
-            {
-                if(col[i]==col[it]) 
-                return true;
-            }
-        }
+      if(col[x]==-1)
+      {
+        if(!dfs(x,graph,col,!c))
         return false;
+      }
+      else 
+      {
+        if(col[x]==c)
+        return false;
+      }
     }
-	bool isBipartite(int V, vector<int>adj[]){
-	    // Code here
-	    vector<bool> vis(V,false);
-	    vector<int> col(V,0);
-	    int par=-1;
-	    for(int i=0;i<V;i++)
-	    {
-	        if(!vis[i])
-	        {
-	        if(dfs(i,adj,vis,col,par))
-	        return false;
-	        }
-	    }
-	    return true;
-	    
-	}
+    return true;
+  }
+    bool isBipartite(vector<vector<int>>& graph) {
+      vector<int> col(graph.size(),-1);
+      for(int i=0;i<graph.size();i++)
+      {
+        if(col[i]==-1)
+        {
+          if(!dfs(i,graph,col,0))
+          return false;
+        }
+      }
+      return true;
+    }

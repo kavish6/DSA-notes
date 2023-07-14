@@ -1,0 +1,28 @@
+Given a weighted, undirected and connected graph of V vertices and E edges. The task is to find the sum of weights of the edges of the Minimum Spanning Tree.
+
+
+WE USE PRIM'S ALGORITHM HERE
+LOGIC: We push a distance or weight of edge and the node in the min heap. we initially add zero,zero node now we see pop the minimum weight edge from the min heap and check if it is visited or not. if it's not visited we add it in the mst and push its neighbors if its visited we skip it.	
+
+
+int spanningTree(int V, vector<vector<int>> adj[])
+    {
+        // code here
+        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> pq;
+        bool vis[V]={false};
+        int ans=0;
+        pq.push({0,0});
+        while(!pq.empty())
+        {
+            auto x=pq.top();
+            pq.pop();
+            if(vis[x.second])continue;
+            vis[x.second]=true;
+            ans+=x.first;
+            for(auto z:adj[x.second])
+            {
+                pq.push({z[1],z[0]});
+            }
+        }
+        return ans;
+    }

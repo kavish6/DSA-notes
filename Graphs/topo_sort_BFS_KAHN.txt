@@ -1,0 +1,38 @@
+Given a Directed Acyclic Graph (DAG) with V vertices and E edges, Find any Topological Sorting of that Graph.
+
+
+LOGIC: YOU CREATE AN INDEGREE ARRAY THAT STORES NO OF EDGES THAT ARE INCOMING TO THAT VERTICE OR NODE. NOW YOU TAKE THE VERTICES WITH INDEGREE AS 0 WHICH MEANS THAT THEY DON'T HAVE ANY OTHER NODE DEPENDENT ON THEM SO YOU CAN JUST USE OR ITERATE THEM THEN SO U PUSH THEM IN A QUEUE AND POP THEM AND WHILE POPPING DELETE THE EDGES FFROM THEM TO THEIR NEIGHBORS MEANING YOU DECREASE THE INDEGREE OF ALL THEIR NEIGHBORS NOW IF ANY OF THE NEIGHBOR BECAME ZERO YOU PUSH THEM IN THE QUEUE AND CONTINUE THE PROCESS.
+
+vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	    vector<int> indeg(V,0),top;
+	    for(int i=0;i<V;i++)
+	    {
+	        for(auto x:adj[i])
+	        {
+	            indeg[x]++;
+	        }
+	    }
+	    queue<int> q;
+	    for(int i=0;i<V;i++)
+	    {
+	        if(indeg[i]==0)
+	        q.push(i);
+	    }
+	    while(!q.empty())
+	    {
+	        int e=q.front();
+	        q.pop();
+	        top.push_back(e);
+	        for(auto x:adj[e])
+	        {
+	            indeg[x]--;
+	            if(indeg[x]==0)
+	            {
+	                q.push(x);
+	            }
+	        }
+	    }
+	    return top;
+	    // code here
+	}

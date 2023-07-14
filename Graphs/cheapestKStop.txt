@@ -1,0 +1,47 @@
+There are n cities and m edges connected by some number of flights. You are given an array flights where flights[i] = [fromi, toi, pricei] indicates that there is a flight from the city fromi to city toi with cost pricei.
+
+You are also given three integers src, dst, and k, return the cheapest price from src to dst with at most k stops. If there is no such route, return -1.
+
+
+
+
+MISTAKE: DON'T JUST USE DIRECT DJIKSTRA WITH STOPS WHILE MOVING GREEDILY ACCORDING TO DISTANCE AS YOU MIGHT GET A MIN PATH TO INTERMEDIATE NODE THAT CAN'T MOVE FORWARD BUT BECAUSE YOU WENT GREEDILY YOU NEVER ADDED A MORE DISTANCE PATH TO THAT NODE THAT COULD HAVE GOTTEN YOU TO DESTINATION AS IT MIGHT HAVE HAD LESSER STOPS.
+
+
+LOGIC: you iterate from source as bfs and keep count of stops and only take paths that give lesser distance than already achieved from lesser stops as we move bfs wise so stops increase linearly and this lesser distance logic is like djikstra so we don't need min heap with stops we just move bfs wise and keep moving to min dist paths then previous.Now at end just check dist array for destination and when you reach destination you will have more than K stops by one as the logic considers the destination also as stop so remember this and stop moving after stops is greater than K.
+
+
+int CheapestFLight(int n, vector<vector<int>>& flights, int src, int dst, int K)  {
+        // Code here
+        vector<int> dist(n,1e8);
+        vector<pair<int,int>> adj[n];
+        for(auto x:flights)
+        {
+            adj[x[0]].push_back({x[1],x[2]});
+        }
+        queue<pair<int,pair<int,int>>> q;
+        dist[src]=0;
+        q.push({0,{src,0}});
+        while(!q.empty())
+        {
+            auto x=q.front();
+            q.pop();
+            int stops=x.first;
+            int node=x.second.first;
+            int wt=x.second.second;
+            if(stops>K) continue;
+            for(auto z:adj[node])
+            {
+                if(wt+z.second<dist[z.first]&&stops<=K)
+                {
+                    dist[z.first]=wt+z.second;
+                    q.push({stops+1,{z.first,wt+z.second}});
+                }
+            }
+        }
+        if(dist[dst]==1e8)
+        return -1;
+        return dist[dst];
+        
+        
+    }

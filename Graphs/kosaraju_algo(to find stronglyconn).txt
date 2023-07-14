@@ -1,5 +1,11 @@
 Given a Directed Graph with V vertices (Numbered from 0 to V-1) and E edges, Find the number of strongly connected components in the graph.
 
+A strongly connected component is nothing but a cycle or group of vertices in which if you start from any vertice you can get to all the vertices in the strongly connnected component group.
+
+
+
+LOGIC : you basically do dfs and push the elements when their dfs is done into a stack(u basically do a topological sort) then reverse all the direction of all the edges and then do a dfs according to the topologicalsort stack order and print the elements or count the number of strongly connected components.
+
 class Solution
 {
 	public:

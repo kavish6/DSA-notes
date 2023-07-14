@@ -1,0 +1,26 @@
+Given a string S, Find all the possible subsequences of the String in lexicographically-sorted order.	
+	
+
+
+LOGIC: You know that there will be 2^n subsequences and if you don't use empty string so there will be 2^n-1 subsequences so you take 2^n-1 as end and take the binary representation of all the numbers from 1 to 2^n -1 and check if the bits are set at different indexes and you take these status of bits as the indexes of chars in the string so if a bit at index 2 is set so you include the char at index 2 in the current subsequence and using this logic you generate all the different subsequences by checking the status of all the bits from 0 to n-1 bits for all the different numbers from 1 to 2^n -1. 	
+	
+	vector<string> AllPossibleStrings(string s){
+		    // Code here
+		    vector<string> ans;
+		    int n=s.length();
+		    for(int i=1;i<=((1<<n) - 1);i++)
+		    {
+		        string temp="";
+		        for(int j=0;j<n;j++)
+		        {
+		            
+		            if(i&(1<<j))
+		            {
+		                temp+=s[j];
+		            }
+		        }
+		        ans.push_back(temp);
+		    }
+		    sort(ans.begin(),ans.end());
+		    return ans;
+		}

@@ -1,0 +1,59 @@
+Given a binary tree root, return the maximum sum of all keys of any sub-tree which is also a Binary Search Tree (BST).
+
+Assume a BST is defined as follows:
+
+    The left subtree of a node contains only nodes with keys less than the node's key.
+    The right subtree of a node contains only nodes with keys greater than the node's key.
+    Both the left and right subtrees must also be binary search trees.
+
+
+LOGIC: YOU CREATE A STRUCTURE OR CLASS TO STORE THE STATE WHETHER THE CURRENT SUBTREE IS BST OR NOT , MAX VALUE IN THAT SUBTREE/TREE, MIN VALUE IN THAT SUBTREE/TREE, AND THE CURRENT MAXIMUM SUM. NOW YOU USE THE LOGIC IN POST ORDER TRAVERSAL THAT IF THE MAXVALUE IN LEFT IS SMALLER THAN THE CURRENT NODE VALUE AND THE MIN VALUE IN THE RIGHT SUBTREE IS BIGGER THAN THE CURRENT NODE'S VALUE THEN THE TREE IS A BST. NOW IF IT IS A BST THEN WE CAN USE THAT LOGIC TO POPULATE THE PROP STRUCTURE FOR IT AND THE MAXIMUM SUM WILL BE THE LEFTMAXSUM + RIGHMAXSUM+CURRENTNODEVALUE AND IF IT IS NOT A BST THEN MAXIMUM OF LEFTMAXSUM AND RIGHTMAXSUM. KEEP A CHECK FOR A GLOBAL MAX VALUE.
+
+
+
+int ans;
+class prop{
+public:
+    bool bst;       //to check if tree is bst
+    int ma;         //max value in a tree
+    int mi;         //min value in an tree
+    int ms;         //current maximum sum
+    prop(){
+        bst=true;
+        ma=INT_MIN;
+        mi=INT_MAX;
+        ms=0;
+    }
+};
+class Solution {
+public:
+    prop calcSum(TreeNode* root){
+        if (root == NULL){
+            return prop();
+        }
+        prop p;
+        prop pl = calcSum(root->left);                        //recursive call for left sub-tree
+        prop pr = calcSum(root->right);                       //recursive call for right sub-tree
+		
+		//if sub-tree including this node is bst
+        if ( pl.bst==true && pr.bst==true && root->val>pl.ma && root->val<pr.mi ){
+            p.bst = true;                                                      //current tree is a bst
+            p.ms = pl.ms + pr.ms + root->val;          
+            p.mi  = min(root->val, pl.mi);
+            p.ma = max(root->val, pr.ma);
+        }
+		//if current tree is not a bst
+        else {
+            p.bst=false;
+            p.ms=max(pl.ms, pr.ms);
+        }
+		
+        ans=max(ans, p.ms);
+        return p;
+    }
+    int maxSumBST(TreeNode* root){
+        ans = 0;
+        calcSum(root);
+        return ans;
+    }
+};

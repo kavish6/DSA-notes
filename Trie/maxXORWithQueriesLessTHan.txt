@@ -1,0 +1,99 @@
+ Maximum XOR With an Element From Array
+
+You are given an array nums consisting of non-negative integers. You are also given a queries array, where queries[i] = [xi, mi].
+
+The answer to the ith query is the maximum bitwise XOR value of xi and any element of nums that does not exceed mi. In other words, the answer is max(nums[j] XOR xi) for all j such that nums[j] <= mi. If all elements in nums are larger than mi, then the answer is -1.
+
+Return an integer array answer where answer.length == queries.length and answer[i] is the answer to the ith query.
+
+
+
+
+
+LOGIC:basically use the same logic as finding the max xor of a number with an array of numbers given in last question just in this question preprocess the queries by storing and sorting them on the basis of mi and also sorting the nums array then iterate the new queries array and only push those numbers from nums which are smaller than current mi in the trie then find the max xor and store at the position at which this query was in the original array .( basically u use offline query array as pair<mi,pair<xi,pos of this query in the given querie> then use this pos to insert in the answer array and return that answer).
+
+
+
+struct Node{
+    Node* link[2];
+    bool isPresent(int a)
+    {
+        return (link[a]!=NULL);
+    }
+    Node* get(int a)
+    {
+        return link[a];
+    }
+    void put(int a,Node* node)
+    {
+        link[a]=node;
+    }
+};
+
+class Trie{
+    Node *root;
+    public:
+    Trie()
+    {
+        root=new Node();
+    }
+    void insert(int num)
+    {
+        Node* node=root;
+        for(int i=31;i>=0;i--)
+        {
+            int a=(num>>i)&1;
+            if(!node->isPresent(a))
+            {
+                node->put(a,new Node());
+            }
+            node=node->get(a);
+        }
+    }
+    int maxXOR(int num)
+    {
+        int ans=0;
+        Node* node=root;
+        for(int i=31;i>=0;i--)
+        {
+            int a=(num>>i)&1;
+            if(node->isPresent(1-a))
+            {
+                ans=ans|(1<<i);
+                node=node->get(1-a);
+            }
+            else
+            {
+                node=node->get(a);
+            }
+        }
+        return ans;
+    }
+};
+
+class Solution {
+public:
+    vector<int> maximizeXor(vector<int>& nums, vector<vector<int>>& queries) {
+        vector<int> ans(queries.size(),-1);
+        sort(nums.begin(),nums.end());
+        vector<pair<int,pair<int,int>>> offlineQueries;
+        Trie tr;
+        for(int i=0;i<queries.size();i++)
+        {
+            offlineQueries.push_back({queries[i][1],{queries[i][0],i}});
+        }
+        sort(offlineQueries.begin(),offlineQueries.end());
+        int j=0;
+        for(int i=0;i<offlineQueries.size();i++)
+        {
+            while(j<nums.size()&&nums[j]<=offlineQueries[i].first)
+            {
+                tr.insert(nums[j]);
+                j++;
+            }
+            if(j!=0)
+            ans[offlineQueries[i].second.second]=tr.maxXOR(offlineQueries[i].second.first);
+        }
+        return ans;
+    }
+};

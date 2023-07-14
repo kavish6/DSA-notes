@@ -3,34 +3,31 @@ Given a string A and a dictionary of n words B, find out if A can be segmented i
 Note: From the dictionary B each word can be taken any number of times and in any order.
 
 
-bool CanParseUtil(unordered_map<string, bool>mp, string word)
-{
-    // if the size id zero that means we completed the word. so we can return true
-    int size = word.size();
-    if(size == 0)
+
+LOGIC: you put all the members of the dictionary in a set then you call another helper function with the set and the given string and you break the string at every index and search for the first part of it in the set and rest part of the string gets called recursively in the helper function.
+
+class Solution {
+public:
+    int dp[301];
+    bool solve(string s,int start,unordered_set<string>& st)
     {
+        if(start==s.length())
         return true;
-    }
-    string temp = "";
-    for(int i = 0; i < word.length(); i++)
-    {
-        temp += word[i];
-        // if the temp exist in hashmap and the parsing operation of the remaining word is true, we can return true.
-        if(mp.find(temp) != mp.end() && CanParseUtil(mp, word.substr(i+1)))
-        {
-            return true;
+        if(dp[start]!=-1)
+        return dp[start];
+        for(int i=start+1;i<=s.length();i++){
+            if(st.find(s.substr(start,i-start))!=st.end())
+            {
+                if(solve(s,i,st))
+                return dp[start]=true;
+            }
         }
+        return dp[start]=false;
     }
-    // if there is a mismatch in the dictionary, we can return false.
-    return false;
-}
-    int wordBreak(string A, vector<string> &B) {
-        //code here
-    
-        unordered_map<string, bool>mp;
-    for(auto it : B)
-    {
-        mp[it] = true;
+    bool wordBreak(string s, vector<string>& wordDict) {
+        memset(dp,-1,sizeof(dp));
+        unordered_set<string> st(wordDict.begin(),wordDict.end());
+        return solve(s,0,st);
+
     }
-    return CanParseUtil(mp,A ) == true ? 1 : 0;
-    }
+};

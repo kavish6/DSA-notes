@@ -1,0 +1,28 @@
+You are given a string s and an integer k. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most k times.
+
+Return the length of the longest substring containing the same letter you can get after performing the above operations.
+
+
+LOGIC: YOU DO SLIDING WINDOW TAKE FIRST AND LAST POINTERS THEN INCREASE FREQ OF CHAR AT LAST AND KEEP A MAXCOUNT VAR TO KEEP COUNT OF THE CHARACTER THAT'S MOST OCCURING IN THE WINDOW AND IF THE K REPLACEMENTS ARE LESSER THAN WHAT'S NEEDED SHIFT THE START OF THE WINDOW AND DECREASE IT'S COUNT. KEEP EXTENDING THE END OF THE WINDOW.
+
+
+
+  int characterReplacement(string s, int k) {
+        unordered_map<char,int> mp;
+        int f=0,l=0,ans=1,n=s.size(),cnt=0;
+        // mp[s[0]]=1;
+        while(f<=l&&l<n)
+        {
+            mp[s[l]]++;
+            cnt=max(mp[s[l]],cnt);
+            if(l-f+1-cnt>k)
+            {
+                mp[s[f]]--;
+                f++;
+            }
+            ans=max(ans,l-f+1);
+            l++;
+        }
+        return ans;
+    }
+

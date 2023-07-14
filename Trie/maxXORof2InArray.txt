@@ -1,0 +1,81 @@
+Given an integer array nums, return the maximum result of nums[i] XOR nums[j], where 0 <= i <= j < n.
+
+
+LOGIC: you basically first insert every number of the array in the trie as its binary representation from left to right taking 32 bits, you check if a bit is set by doing an and with the number right shifted that many bits and with 1 if it is 1 then bit at that pos is set else unset. now after all the numbers are inserted in the trie, you again iterate the array and find the maxXOR for each number with the numbers in the trie by checking if the compliment of that bit is present in the trie at that position if it is present then in the answer that bit will be set.
+
+
+
+
+struct Node{
+    Node* link[2];
+    bool isPresent(int a)
+    {
+        return (link[a]!=NULL);
+    }
+    Node* get(int a)
+    {
+        return link[a];
+    }
+    void put(int a,Node* node)
+    {
+        link[a]=node;
+    }
+};
+
+class Trie{
+    Node *root;
+    public:
+    Trie()
+    {
+        root=new Node();
+    }
+    void insert(int num)
+    {
+        Node* node=root;
+        for(int i=31;i>=0;i--)
+        {
+            int a=(num>>i)&1;
+            if(!node->isPresent(a))
+            {
+                node->put(a,new Node());
+            }
+            node=node->get(a);
+        }
+    }
+    int maxXOR(int num)
+    {
+        int ans=0;
+        Node* node=root;
+        for(int i=31;i>=0;i--)
+        {
+            int a=(num>>i)&1;
+            if(node->isPresent(1-a))
+            {
+                ans=ans|(1<<i);
+                node=node->get(1-a);
+            }
+            else
+            {
+                node=node->get(a);
+            }
+        }
+        return ans;
+    }
+};
+
+class Solution {
+public:
+    int findMaximumXOR(vector<int>& nums) {
+        Trie tr;
+        int ans=INT_MIN;
+        for(auto x:nums)
+        {
+            tr.insert(x);
+        }
+        for(auto x:nums)
+        {
+            ans=max(ans,tr.maxXOR(x));
+        }
+        return ans;
+    }
+};

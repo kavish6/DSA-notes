@@ -1,0 +1,21 @@
+The problem is to find the shortest distances between every pair of vertices in a given edge-weighted directed graph. The graph is represented as an adjacency matrix of size n*n. Matrix[i][j] denotes the weight of the edge from i to j. If Matrix[i][j]=-1, it means there is no edge from i to j.
+Do it in-place.
+
+
+LOGIC: YOU BASICALLY HAVE A COST MATRIX WHICH HAS MATRIX[I][J] TELLING THE COST TO GET FROM I TO J IF THERE IS A DIRECT NODE ELSE -1 SO YOU RUN THREE NESTED LOOPS WITH THE TOP LOOP GIVING YOU THE NODE VIA WHICH YOU GO TO THE DESTINATION FROM THE SOURCE WHERE SOURCE IS THE SECOND LEVEL NODE AND DESTINATION IS THE LOWEST LEVEL LOOP . YOU BASICALLY TAKE ALL NODES AS VIA OR STOPPING POINT TO GET TO ALL NODES FROM ALL NODES AND CHECK THE CURRENT VALUES IN THE COST MATRIX AND IF THE COST IS LOWER THEN CHANGE THE VALUE.
+
+
+	void shortest_distance(vector<vector<int>>&matrix){
+	    // Code here
+	     for(int k=0;k<matrix.size();k++)
+	     {
+	         for(int i=0;i<matrix.size();i++)
+	         {
+	             for(int j=0;j<matrix.size();j++)
+	             {
+	                if(matrix[i][k]!=-1&&matrix[k][j]!=-1&&(matrix[i][k]+matrix[k][j]<(matrix[i][j]!=-1?matrix[i][j]:INT_MAX)))
+	                 matrix[i][j]=matrix[i][k]+matrix[k][j];
+	             }
+	         }
+	     }
+	}

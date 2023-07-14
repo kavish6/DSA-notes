@@ -1,0 +1,42 @@
+You are given n balloons, indexed from 0 to n - 1. Each balloon is painted with a number on it represented by an array nums. You are asked to burst all the balloons.
+
+If you burst the ith balloon, you will get nums[i - 1] * nums[i] * nums[i + 1] coins. If i - 1 or i + 1 goes out of bounds of the array, then treat it as if there is a balloon with a 1 painted on it.
+
+Return the maximum coins you can collect by bursting the balloons wisely.
+
+
+
+LOGIC: instead of partioning on the basis of which should be popped first take the partion or selection point as the  one that will be popped last. insert 1 at the start and 1 at the end and call the recursion for 1 and size-2 indexes, take each point as the last balloon popped and if it is the last balloon popped then the left subarray will have the rightmost balloon as this one and right subarray will have this as the leftmost balloon so you can calculate both as individual subproblems and the value for this should be leftend*rightend*thisvalue+leftsubproblem +rightsubproblem.Do mcm for each this way and return max
+
+
+
+
+class Solution {
+public:
+    int dp[302][302];
+    int solve(vector<int> &nums,int i,int j)
+    {
+        if(i>j)
+        return 0;
+        if(dp[i][j]!=-1)
+        return dp[i][j];
+        int mx=0;
+        for(int k=i;k<=j;k++)
+        {
+            int a=solve(nums,i,k-1);
+            int b=solve(nums,k+1,j);
+            int c=nums[i-1]*nums[k]*nums[j+1];
+            mx=max(mx,a+b+c);
+        }
+        return dp[i][j]=mx;
+    }
+    int maxCoins(vector<int>& nums) {
+        memset(dp,-1,sizeof(dp));
+        nums.push_back(1);
+        nums.insert(nums.begin(),1);
+        // cout<<nums[0]<<nums[nums.size()-1];
+        // return 0;
+        return solve(nums,1,nums.size()-2);
+
+    }
+};

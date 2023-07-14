@@ -1,0 +1,38 @@
+BELLMAN FORD
+Given a weighted, directed and connected graph of V vertices and E edges, Find the shortest distance of all the vertex's from the source vertex S.
+Note: If the Graph contains a negative cycle then return an array consisting of only -1.
+
+
+
+LOGIC: you go through the edges N-1 times and check if the dist of the the node to which the edge is is lesser than dist from the node from which the edge is from + the weight of the edge else change the dist of the node to which the edge is going to. to check for negative cycles you go through the edges once more and if the distance decrease there is a negative cycle.
+
+vector<int> bellman_ford(int V, vector<vector<int>>& edges, int S) {
+        // Code here
+        vector<int> dist(V,1e8);
+        dist[S]=0;
+        for(int i=0;i<V-1;i++)
+        {
+            for(auto x:edges)
+            {
+                int v1=x[0];
+                int v2=x[1];
+                int wt=x[2];
+                if(dist[v1]!=1e8&&dist[v1]+wt<dist[v2])
+                {
+                    dist[v2]=wt+dist[v1];
+                }
+            }
+        }
+        for(auto x:edges)
+        {
+            int v1=x[0];
+                int v2=x[1];
+                int wt=x[2];
+            if(dist[v1]!=1e8&&dist[v1]+wt<dist[v2])
+                {
+                    return {-1};
+                }
+        }
+        return dist;
+        
+    }

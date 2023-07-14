@@ -22,21 +22,51 @@ int longestSubsequence(int n, int a[])
 // This is another approach it has SC:O(n) and TC:O(n^2)
 In this approach we initialize the value of LIS at every position as 1 then use the values of previous elements to modify the Lis value at that index depending if the previously element is smaller than the desired or current element.
 
-int longestSubsequence(int n, int a[])
+
+
+THE COMMENTED CODE IS THE MEMOIZED CODE FOR THIS IT N^2 SPACE AND N^2 TIME THE NORMAL CODE IS OPTIMIZED BY CONVERTING THE DP TO TABULATION AND THEN REDUCING THE TIME COMPLEXITY.
+
+class Solution {
+public:
+    // int dp[2500][2501];
+    // int solve(vector<int>& nums,int i,int prev)
+    // {
+    //     if(i==nums.size())
+    //     return 0;
+    //     int t1=0,t2=0;
+    //     if(dp[i][prev+1]!=-1)
+    //     return dp[i][prev+1];
+    //     if(prev==-1||nums[i]>nums[prev])
+    //     {
+    //         t1=1+solve(nums,i+1,i);
+    //     }
+    //     t2=solve(nums,i+1,prev);
+    //     return dp[i][prev+1]=max(t1,t2);
+    // }
+    int lengthOfLIS(vector<int>& nums) {
+    //     memset(dp,-1,sizeof(dp));
+    //   return solve(nums,0,-1);  
+    int n=nums.size();
+    vector<int> curr(n+1,0);
+
+    // for(int i=0;i<=n;i++)
+    // {
+    //     dp[n][i]=0;
+    // }
+    for(int i=n-1;i>=0;i--)
     {
-        int dp[n];
-        int ans=0;
-        for(int i=0;i<n;i++)dp[i]=1;
-        // memset(dp,1,sizeof(dp));
-        for(int i=0;i<n;i++)
+        for(int j=-1;j<i;j++)
         {
-            for(int j=0;j<i;j++)
+            int t1=0,t2=0;
+            if(j==-1||nums[i]>nums[j])
             {
-                if(a[i]>a[j])
-                dp[i]=max(dp[i],dp[j]+1);
+                t1=1+curr[i+1];
             }
-            ans=max(ans,dp[i]);
+            t2=curr[j+1];
+            curr[j+1]=max(t1,t2);
+            // prev=curr;
         }
-        return ans;
-       // your code here
-    }    
+    }
+    return curr[0];
+    }
+};

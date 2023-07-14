@@ -1,0 +1,73 @@
+Serialization is the process of converting a data structure or object into a sequence of bits so that it can be stored in a file or memory buffer, or transmitted across a network connection link to be reconstructed later in the same or another computer environment.
+
+Design an algorithm to serialize and deserialize a binary tree. There is no restriction on how your serialization/deserialization algorithm should work. You just need to ensure that a binary tree can be serialized to a string and this string can be deserialized to the original tree structure.
+
+Clarification: The input/output format is the same as how LeetCode serializes a binary tree. You do not necessarily need to follow this format, so please be creative and come up with different approaches yourself.
+
+
+
+LOGIC: You do a preorder traversal of the tree and add nodes to string and if null node then add N use spaces show a different node. then to deserialize use istringstream which puts strings into objects by using the space as delimiter pop each string as learned from a stream then check if its null or not if not null then make node with that value and use the next part of stream for its left and right children.
+
+
+
+
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        string ser="";
+        stack<TreeNode*> st;
+        st.push(root);
+        while(!st.empty())
+        {
+            auto x=st.top();
+            st.pop();
+            if(x!=NULL)
+        {
+            ser+=' '+to_string(x->val);
+            st.push(x->right);
+            st.push(x->left);
+        }
+            else
+            ser+=" N";
+            }
+        cout<<ser;
+    return ser;
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        istringstream s(data);
+        return helper(s);
+    }
+    TreeNode* helper(istringstream &s)
+    {
+        string x;
+        s>>x;
+        if(x=="N")
+        return NULL;
+        else
+        {
+            TreeNode *n=new TreeNode(stoi(x));
+            n->left=helper(s);
+            n->right=helper(s);
+            return n;
+        }
+    }
+};
+
+// Your Codec object will be instantiated and called as such:
+// Codec ser, deser;
+// TreeNode* ans = deser.deserialize(ser.serialize(root));
